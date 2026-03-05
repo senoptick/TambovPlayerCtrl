@@ -46,8 +46,6 @@ def play_sound(sound_file):
     # Запуск в фоне, тихо (-q)
     subprocess.Popen(["aplay", "-q", sound_file], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-def get_multiple_line_values(chip_path, line_offsets):
-
 
 def main():
     try:
