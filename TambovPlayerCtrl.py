@@ -6,7 +6,7 @@ import threading
 import sys
 
 # ==================== НАСТРОЙКИ =====================
-CHIP_NAME = 'gpiochip0'               # основной чип на Orange Pi Zero 3
+CHIP_NAME = 'dev/gpiochip0'               # основной чип на Orange Pi Zero 3
 
 BUTTON_LINES = [9, 6, 5, 8]           # кнопка 1,2,3,4
 
