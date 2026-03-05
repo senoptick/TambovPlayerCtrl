@@ -49,6 +49,7 @@ def play_sound(sound_file):
 
 def main():
     try:
+        print("asd")
         with gpiod.request_lines(
             CHIP_NAME,
             consumer="get-multiple-line-values",
