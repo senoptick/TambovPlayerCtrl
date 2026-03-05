@@ -4,6 +4,7 @@ import subprocess
 import threading
 import sys
 import wiringpi
+import os
 
 # ==================== НАСТРОЙКИ =====================
 
