@@ -61,7 +61,7 @@ def main():
         ) as request:
             prev_values = [1] * len(BUTTON_LINES)   # 1 = отпущена (pull-up)
             last_change_times = [0.0] * len(BUTTON_LINES)
-
+            print("сконфигурированы пины")
             while True:
                 for i in BUTTON_LINES:
                     values[i] = request.get_value(BUTTON_LINES[i])
