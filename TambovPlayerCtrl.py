@@ -5,6 +5,7 @@ import threading
 import sys
 import wiringpi
 import os
+import signal
 
 # ==================== НАСТРОЙКИ =====================
 
