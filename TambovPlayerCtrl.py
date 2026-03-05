@@ -45,39 +45,38 @@ def play_sound(sound_file):
     # Запуск в фоне, тихо (-q)
     subprocess.Popen(["aplay", "-q", sound_file], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
+def get_lines_value(chip_path):
+
+
+        return value
 
 def main():
     try:
-        with gpiod.Chip(CHIP_NAME) as chip:
-            # Запрашиваем линии как входы с pull-up
-            lines = chip.get_lines(BUTTON_LINES)
-            lines.request(
-                consumer="button-player",
-                type=gpiod.LINE_REQ_DIR_IN,
-                flags=gpiod.LINE_REQ_FLAG_BIAS_PULL_UP
-            )
-
-            # Для программного debounce храним предыдущие состояния
+        values = []
+        with gpiod.request_lines(
+            chip_path,
+            consumer="limit_switch",
+            config={i: gpiod.LineSettings(direction=Direction.INPUT, bias=Bias.PULL_UP) for i in lines},
+        ) as request:
             prev_values = [1] * len(BUTTON_LINES)   # 1 = отпущена (pull-up)
             last_change_times = [0.0] * len(BUTTON_LINES)
 
-            print("Ожидаю нажатий...")
-
             while True:
-                values = lines.get_values()
-                
-                for i, val in enumerate(values):
-                    now = time.time()
+                for i in BUTTON_LINES:
+                    values[i] = request.get_value(BUTTON_LINES[i])
+                print(values)  
+                # for i, val in enumerate(values):
+                #     now = time.time()
                     
-                    # Сработало нажатие (переход 1 → 0) и debounce прошёл
-                    if val == 0 and prev_values[i] == 1 and (now - last_change_times[i] > DEBOUNCE_TIME):
-                        last_change_times[i] = now
-                        sound = SOUNDS[i]
-                        # Запуск в отдельном потоке
-                        threading.Thread(target=play_sound, args=(sound,), daemon=True).start()
+                #     # Сработало нажатие (переход 1 → 0) и debounce прошёл
+                #     if val == 0 and prev_values[i] == 1 and (now - last_change_times[i] > DEBOUNCE_TIME):
+                #         last_change_times[i] = now
+                #         sound = SOUNDS[i]
+                #         # Запуск в отдельном потоке
+                #         threading.Thread(target=play_sound, args=(sound,), daemon=True).start()
                 
-                prev_values = values.copy()
-                time.sleep(0.020)  # ~50 Гц — достаточно, CPU почти не грузит
+                # prev_values = values.copy()
+                # time.sleep(0.020)  # ~50 Гц — достаточно, CPU почти не грузит
 
     except PermissionError:
         print("Ошибка: нет доступа к /dev/gpiochip*. Запусти от root или добавь пользователя в группу gpio:")
