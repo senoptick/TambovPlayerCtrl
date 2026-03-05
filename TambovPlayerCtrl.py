@@ -46,6 +46,7 @@ def play_sound(sound_file):
             # или более жёстко: os.kill(current_player.pid, signal.SIGKILL)
         except ProcessLookupError:
             pass  # уже завершился
+        current_player = None
 
     # Запускаем новый процесс с новой process group
     current_player = subprocess.Popen(
