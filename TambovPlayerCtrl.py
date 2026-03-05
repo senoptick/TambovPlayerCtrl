@@ -45,16 +45,20 @@ def play_sound(sound_file):
             os.killpg(current_player.pid, signal.SIGTERM)
             # или более жёстко: os.kill(current_player.pid, signal.SIGKILL)
         except ProcessLookupError:
-            pass  # уже завершился
-        current_player = None
-
+            current_player = subprocess.Popen(
+                ["aplay", "-q", sound_file],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                preexec_fn=os.setsid          # ← важно: новая process group
+            )
+    else:
     # Запускаем новый процесс с новой process group
-    current_player = subprocess.Popen(
-        ["aplay", "-q", sound_file],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        preexec_fn=os.setsid          # ← важно: новая process group
-    )
+        current_player = subprocess.Popen(
+            ["aplay", "-q", sound_file],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            preexec_fn=os.setsid          # ← важно: новая process group
+        )
 
 # ==================== ОСНОВНОЙ КОД =====================
 
