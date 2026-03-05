@@ -54,7 +54,7 @@ def main():
     try:
         values = []
         with gpiod.request_lines(
-            chip_path,
+            CHIP_NAME,
             consumer="limit_switch",
             config={i: gpiod.LineSettings(direction=Direction.INPUT, bias=Bias.PULL_UP) for i in lines},
         ) as request:
