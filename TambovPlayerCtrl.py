@@ -4,6 +4,7 @@ import time
 import subprocess
 import threading
 import sys
+from gpiod.line import Direction, Bias
 
 # ==================== НАСТРОЙКИ =====================
 CHIP_NAME = '/dev/gpiochip0'               # основной чип на Orange Pi Zero 3
