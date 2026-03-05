@@ -9,7 +9,7 @@ import signal
 
 # ==================== НАСТРОЙКИ =====================
 
-BUTTON_LINES = [2, 5, 7, 8]  # wiringPi номера пинов
+BUTTON_LINES = [2, 5, 6, 8]  # wiringPi номера пинов
 
 SOUNDS = [
     "1.wav",
