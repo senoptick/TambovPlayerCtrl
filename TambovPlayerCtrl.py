@@ -75,7 +75,7 @@ def main():
 
                 val = wiringpi.digitalRead(pin)
                 now = time.time()
-
+                print(i, val)
                 # нажатие (1 -> 0)
                 if val == 0 and prev_values[i] == 1 and (now - last_change_times[i] > DEBOUNCE_TIME):
 
