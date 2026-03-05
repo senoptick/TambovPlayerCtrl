@@ -43,6 +43,7 @@ def play_sound(sound_file):
     if current_player is not None:
         print("cheto igraet")
         os.killpg(current_player.pid, signal.SIGTERM)
+        current_player.wait(timeout=0.5)
             # или более жёстко: os.kill(current_player.pid, signal.SIGKILL)
     
     current_player = subprocess.Popen(
