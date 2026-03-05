@@ -23,11 +23,12 @@ LOCK_TIMEOUT = 1.5
 
 audio_lock = threading.Lock()
 last_play_time = 0.0
+current_player = None
 
 # ==================== ФУНКЦИИ =====================
 
 def play_sound(sound_file):
-    global last_play_time
+    global last_play_time, current_player
     now = time.time()
 
     with audio_lock:
@@ -37,13 +38,20 @@ def play_sound(sound_file):
         last_play_time = now
 
     print(f"   → Запускаю: {sound_file}")
+    if current_player is not None:
+        try:
+            os.killpg(current_player.pid, signal.SIGTERM)
+            # или более жёстко: os.kill(current_player.pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass  # уже завершился
 
-    subprocess.Popen(
+    # Запускаем новый процесс с новой process group
+    current_player = subprocess.Popen(
         ["aplay", "-q", sound_file],
         stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL
+        stderr=subprocess.DEVNULL,
+        preexec_fn=os.setsid          # ← важно: новая process group
     )
-
 
 # ==================== ОСНОВНОЙ КОД =====================
 
