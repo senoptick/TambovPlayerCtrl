@@ -9,7 +9,7 @@ from gpiod.line import Direction, Bias
 # ==================== НАСТРОЙКИ =====================
 CHIP_NAME = '/dev/gpiochip0'               # основной чип на Orange Pi Zero 3
 
-BUTTON_LINES = [9, 6, 5, 8]           # кнопка 1,2,3,4
+BUTTON_LINES = [5, 6]           # кнопка 1,2,3,4
 
 SOUNDS = [
     "1.wav",  
@@ -49,7 +49,6 @@ def play_sound(sound_file):
 
 def main():
     try:
-        print("asd")
         with gpiod.request_lines(
             CHIP_NAME,
             consumer="get-multiple-line-values",
