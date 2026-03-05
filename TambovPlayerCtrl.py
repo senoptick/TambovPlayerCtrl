@@ -49,18 +49,18 @@ def play_sound(sound_file):
 
 def main():
     try:
-        prev_values = [1] * len(BUTTON_LINES)
-        
         with gpiod.request_lines(
             CHIP_NAME,
             consumer="get-multiple-line-values",
             config={tuple(BUTTON_LINES): gpiod.LineSettings(direction=Direction.INPUT, bias=Bias.PULL_UP)},
         ) as request:
-
+            print("a")
             prev_values = [1] * len(BUTTON_LINES)   # 1 = отпущена (pull-up)
             last_change_times = [0.0] * len(BUTTON_LINES)
+            
             vals = request.get_values()
             print(vals)
+            
             for i, val in enumerate(vals):
                 now = time.time()
                     
