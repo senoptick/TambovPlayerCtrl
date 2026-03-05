@@ -41,6 +41,7 @@ def play_sound(sound_file):
 
     print(f"   → Запускаю: {sound_file}")
     if current_player is not None:
+        print("cheto igraet")
         os.killpg(current_player.pid, signal.SIGTERM)
             # или более жёстко: os.kill(current_player.pid, signal.SIGKILL)
     
