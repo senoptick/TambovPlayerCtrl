@@ -56,7 +56,7 @@ def main():
         with gpiod.request_lines(
             CHIP_NAME,
             consumer="limit_switch",
-            config={i: gpiod.LineSettings(direction=Direction.INPUT, bias=Bias.PULL_UP) for i in lines},
+            config={i: gpiod.LineSettings(direction=Direction.INPUT, bias=Bias.PULL_UP) for i in BUTTON_LINES},
         ) as request:
             prev_values = [1] * len(BUTTON_LINES)   # 1 = отпущена (pull-up)
             last_change_times = [0.0] * len(BUTTON_LINES)
