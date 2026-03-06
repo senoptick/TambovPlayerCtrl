@@ -47,7 +47,7 @@ def play_sound(sound_file):
             # или более жёстко: os.kill(current_player.pid, signal.SIGKILL)
     
     current_player = subprocess.Popen(
-        ["aplay", sound_file],
+        ["aplay", "--volume=200", sound_file],
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
         preexec_fn=os.setsid          # ← важно: новая process group
