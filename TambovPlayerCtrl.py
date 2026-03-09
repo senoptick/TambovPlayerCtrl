@@ -8,19 +8,26 @@ import os
 import signal
 
 # ==================== НАСТРОЙКИ =====================
+def find_sound(name):
+    for ext in [".mp3", ".wav"]:
+        path = f"/content/{name}{ext}"
+        if os.path.exists(path):
+            return path
+    raise FileNotFoundError(f"Файл {name}.mp3 или {name}.wav не найден")
 
 BUTTON_LINES = [2, 8, 5, 6]  # wiringPi номера пинов
 LED_LINES = [16, 13, 10, 9]
 
 SOUNDS = [
-    "1.wav",
-    "2.wav",
-    "3.wav",
-    "4.wav"
+    find_sound("1"),
+    find_sound("2"),
+    find_sound("3"),
+    find_sound("4")
 ]
 
 DEBOUNCE_TIME = 0.25
 LOCK_TIMEOUT = 1.5
+
 
 # ==================== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ =====================
 
@@ -30,6 +37,15 @@ current_player = None
 current_led = None
 
 # ==================== ФУНКЦИИ =====================
+def get_player(sound_file):
+
+    if sound_file.endswith(".mp3"):
+        return ["mpg123", sound_file]
+
+    if sound_file.endswith(".wav"):
+        return ["aplay", sound_file]
+
+    return ["ffplay", "-nodisp", "-autoexit", sound_file]
 
 def play_sound(sound_file, index):
 
@@ -50,7 +66,7 @@ def play_sound(sound_file, index):
         print(f"   → Запускаю: {sound_file}")
 
         # выключаем предыдущую подсветку
-        if current_led is not None and current_led != led_pin:
+        if current_led is not None:
             wiringpi.digitalWrite(current_led, 0)
 
         # останавливаем старый звук
@@ -61,13 +77,15 @@ def play_sound(sound_file, index):
             except:
                 pass
 
+        if led_pin == current_led:
+            return
         # включаем новую подсветку
         wiringpi.digitalWrite(led_pin, 1)
         current_led = led_pin
 
         # запускаем звук
         current_player = subprocess.Popen(
-            ["aplay", sound_file],
+            get_player(sound_file),
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
             preexec_fn=os.setsid
