@@ -15,7 +15,7 @@ def find_sound(name):
             return path
     raise FileNotFoundError(f"Файл {name}.mp3 или {name}.wav не найден")
 
-BUTTON_LINES = [2, 8, 5, 6]  # wiringPi номера пинов
+BUTTON_LINES = [2, 8, 17, 6]  # wiringPi номера пинов
 LED_LINES = [16, 13, 10, 9]
 
 SOUNDS = [
